@@ -36,7 +36,8 @@ class DirectoryScanner:
             files[:] = [f for f in files if not self._should_ignore(os.path.join(root, f))]
             # Append all remaining filenames to the file_list
             for file in files:
-                file_list.append(os.path.join(root, file))
+                relative_path = os.path.relpath(os.path.join(root, file), self._directory_path)
+                file_list.append(relative_path)
         return file_list
 
 # Example usage
