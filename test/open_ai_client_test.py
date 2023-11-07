@@ -6,7 +6,7 @@ class TestOpenAPIClient(unittest.TestCase):
 
     def setUp(self):
         self.api_key = 1.0# "TEST_API_KEY"
-        self.client = open_ai_client.OpenAIClient(self.api_key)
+        self.client = open_ai_client.OpenAIClient(api_key = self.api_key, model =  "das model")
 
     @patch('requests.post')
     def test_generate_chat_completion_success(self, mock_post):
@@ -26,6 +26,8 @@ class TestOpenAPIClient(unittest.TestCase):
         
         self.assertTrue('Banana' in kwargs["data"], "The prompt should be passed to the API")
         self.assertTrue('"temperature": 0.7' in kwargs["data"], "Temperature should be passed to the API")
+        self.assertTrue('"model": "das model"' in kwargs["data"], "Model should be passed to the API")
+
         self.assertEqual(response, "Mocked response")
 
 
