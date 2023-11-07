@@ -8,7 +8,8 @@ from open_ai_client.open_ai_client import OpenAIClient
 OPEN_AI_KEY = "OPEN_AI_KEY"
 
 PROMPT_PREFIX = """
-Please generate a README file in markdown for a code project. The file names and content are given as follows (separated by line with "======="): 
+Please generate a README file in markdown for a code project. Files are given to understand the structue, not to be listed in the README file. 
+The file names and content are given as follows (separated by line with "======="): 
 
 """
 
@@ -39,14 +40,13 @@ def make_prompt(file_contents: List[FileContent]):
 
     prompt += f"""
 
-        END OF FILES, following instructions are important:
+        end of files content, following instructions are important:
     
         For the readme, the following guidelines should apply:
-        1. Only the content, in markdown, nothing else
-        2. Enumerate and describe each directory, but not individual files
-        3. Do NOT describe the dependencies
-        4. Have a section summarizing the TODOS
-        5. Add a single Emoji at the end of each section title (line starting with ##, for example "## TODOS"), with meaning related to the section. If no meaningful emoji can be found, use the a random emoji,
+        1. Describe the project and usage, and other relevant information
+        2. NEVER had description of the code, or list filenames. This is not a documentation, it is a README
+        2. Have a section summarizing the TODOS
+        3. Add an Emoji at the end of each section title (line starting with ##, for example "## TODOS"), with meaning related to the section. If no meaningful emoji can be found, use the a random emoji,
 
         """
     return prompt + PROMPT_SUFFIX
@@ -72,7 +72,7 @@ def main(
     files = DirectoryScanner(directory).scan()
     file_contents = FileReader(files).read_files()
 
-    llm_client = OpenAIClient(get_openai_key(), temperature=0.7)
+    llm_client = OpenAIClient(get_openai_key(), temperature=0.5)
 
     prompt = make_prompt(file_contents)
 
