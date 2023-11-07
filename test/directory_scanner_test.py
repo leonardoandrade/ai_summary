@@ -9,7 +9,7 @@ def scanner():
     mock_directory_path = os.path.join(current_dir, "./mock_directory")
     return directory_scanner.DirectoryScanner(mock_directory_path)
 
-def test_list_files(scanner):
+def test_scan(scanner):
     expected_files = [
         ".gitignore",
         "index.js",
@@ -20,5 +20,5 @@ def test_list_files(scanner):
         "test/test_server.js"
     ]
 
-    files = scanner.list_files()
+    files = scanner.scan()
     assert sorted(files) == sorted(expected_files)

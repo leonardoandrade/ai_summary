@@ -1,6 +1,5 @@
 from typing import List
 import os
-import magic
 
 class FileContent:
     def __init__(self, filename: str, content: str, is_binary: bool) -> None:
@@ -14,7 +13,7 @@ class FileReader:
 
     def read_files(self) -> List[FileContent]:
         file_contents: List[FileContent] = []
-        mime = magic.Magic()
+
         for filename in self.filenames:
             try:
                 with open(filename, 'rb') as file:

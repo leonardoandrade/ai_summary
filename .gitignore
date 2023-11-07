@@ -5,3 +5,4 @@
 __pycache__
 *.lcov
 .coverage
+previous_generations

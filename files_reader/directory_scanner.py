@@ -13,7 +13,6 @@ class DirectoryScanner:
         if os.path.exists(gitignore_path):
             with open(gitignore_path, "r") as file:
                 ignore_list = file.read().splitlines()
-        print(ignore_list)
         return ignore_list
 
     def _should_ignore(self, path: str) -> bool:
@@ -27,22 +26,13 @@ class DirectoryScanner:
                         return True
         return False
 
-    def list_files(self) -> List[str]:
+    def scan(self) -> List[str]:
         file_list: List[str] = []
-        # Iterate through all files and directories in the specified directory
         for root, dirs, files in os.walk(self._directory_path):
-            # Exclude files and directories specified in .gitignore
             dirs[:] = [d for d in dirs if not self._should_ignore(os.path.join(root, d))]
             files[:] = [f for f in files if not self._should_ignore(os.path.join(root, f))]
-            # Append all remaining filenames to the file_list
             for file in files:
                 relative_path = os.path.relpath(os.path.join(root, file), self._directory_path)
                 file_list.append(relative_path)
         return file_list
 
-# Example usage
-directory_path: str = "."
-scanner: DirectoryScanner = DirectoryScanner(directory_path)
-file_list: List[str] = scanner.list_files()
-print("List of filenames in the directory:")
-print(file_list)

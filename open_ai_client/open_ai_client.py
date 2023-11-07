@@ -16,6 +16,7 @@ class OpenAIClient:
         
         payload = {
             "messages": [{"role": "user", "content": prompt}],
+            "model": "gpt-3.5-turbo",
             "temperature": self.temperature
         }
         
@@ -25,5 +26,7 @@ class OpenAIClient:
             data = response.json()
             return data['choices'][0]['message']['content']
         else:
+            print(response)
+            print(response.json())
             return "Error occurred while generating chat completion."
 
