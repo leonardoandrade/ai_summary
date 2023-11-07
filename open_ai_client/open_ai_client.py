@@ -2,8 +2,9 @@ import requests
 import json
 
 class OpenAIClient:
-    def __init__(self, api_key: str, temperature: float = 0.7):
+    def __init__(self, api_key: str, model: str, temperature: float = 0.7):
         self.api_key = api_key
+        self.model = model
         self.temperature = temperature
 
     def generate_chat_completion(self, prompt: str) -> str:
@@ -16,7 +17,7 @@ class OpenAIClient:
         
         payload = {
             "messages": [{"role": "user", "content": prompt}],
-            "model": "gpt-3.5-turbo",
+            "model": self.model,
             "temperature": self.temperature
         }
         
@@ -29,4 +30,3 @@ class OpenAIClient:
             print(response)
             print(response.json())
             return "Error occurred while generating chat completion."
-
