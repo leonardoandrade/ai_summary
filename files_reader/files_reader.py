@@ -1,6 +1,5 @@
-from typing import List
+from typing import List, Optional
 import os
-
 class FileContent:
     def __init__(self, filename: str, content: str, is_binary: bool) -> None:
         self.filename: str = filename
@@ -8,8 +7,9 @@ class FileContent:
         self.is_binary: bool = is_binary
 
 class FileReader:
-    def __init__(self, filenames: List[str]) -> None:
+    def __init__(self, filenames: List[str], num_lines: Optional[int] = 200) -> None:
         self.filenames: List[str] = filenames
+        self.num_lines: int = num_lines
 
     def read_files(self) -> List[FileContent]:
         file_contents: List[FileContent] = []
@@ -17,11 +17,16 @@ class FileReader:
         for filename in self.filenames:
             try:
                 with open(filename, 'rb') as file:
-                    file_content: bytes = file.read()
-                    is_binary: bool = b'\x00' in file_content  # Check if the file contains null bytes (indicating binary)
-                    content: str = file_content.decode('utf-8') if not is_binary else ''
+                    is_binary = b'\x00' in file.read(1024)  # Check if the file contains null bytes within the first 1024 bytes
                     relative_filename = os.path.relpath(filename)  # Get the relative filename
-                    file_contents.append(FileContent(relative_filename, content, is_binary))
+
+                    if not is_binary:
+                        with open(filename, 'r', encoding='utf-8') as text_file:
+                            lines = text_file.readlines()[:self.num_lines]  # Read only the first self.num_lines lines
+                            content = ''.join(lines)
+                            file_contents.append(FileContent(relative_filename, content, is_binary))
+                    else:
+                        file_contents.append(FileContent(relative_filename, '', is_binary))
             except FileNotFoundError:
                 print(f"File '{filename}' not found.")
             except PermissionError:

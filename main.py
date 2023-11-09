@@ -66,11 +66,11 @@ def generate_readme(content: str, target_file: str) -> None:
 
 
 def main(
-    directory: str, target_file: str, generate_changelog: Optional[bool] = True, model: Optional[str] = DEFAULT_MODEL
+    directory: str, target_file: str, num_lines: int, generate_changelog: Optional[bool] = True, model: Optional[str] = DEFAULT_MODEL
 ) -> None:
     files = DirectoryScanner(directory).scan()
-    file_contents = FileReader(files).read_files()
-
+    file_contents = FileReader(files, num_lines).read_files()
+   
     last_n_commit_messages = []
     if generate_changelog:
         git_commit_fetcher = GitCommitFetcher(directory)
@@ -113,5 +113,17 @@ if __name__ == "__main__":
         help=f"Specify the model to use (default: {DEFAULT_MODEL})"
     )
 
+    parser.add_argument(
+        "--num-lines",
+        type=int,
+        default=200,
+        help="Number of lines to read from each file (default: 200)",
+    )
+
     args = parser.parse_args()
-    main(args.directory, args.target_file, args.generate_changelog, args.model)
+    main(args.directory, args.target_file, args.num_lines, args.generate_changelog, args.model)
+
+
+
+
+

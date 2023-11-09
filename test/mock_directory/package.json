@@ -1,4 +1,26 @@
 {
-    "isArray":"~1.0.0",
-    "name": "mock-directory"
-}
+    "name": "example-package",
+    "version": "1.0.0",
+    "description": "An example package.json file",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "test": "jest"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/example/example-package.git"
+    },
+    "keywords": [
+      "example",
+      "package",
+      "json"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/example/example-package/issues"
+    },
+    "homepage": "https://github.com/example/example-package"
+  }
+  

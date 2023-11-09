@@ -16,7 +16,7 @@ def file_reader():
         os.path.join(mock_directory_path, "test/test_server.js"),
         os.path.join(mock_directory_path, "v2.zip")
     ]
-    return FileReader(filenames)
+    return FileReader(filenames, num_lines=5)
 
 def test_read_files(file_reader):
     file_contents = file_reader.read_files()
@@ -28,8 +28,8 @@ def test_read_files(file_reader):
 
     assert file_contents[1].filename == "test/mock_directory/package.json"
     assert file_contents[1].is_binary is False
-    assert file_contents[1].content.startswith("{")
-    assert '"name": "mock-directory"' in file_contents[1].content
+    package_json_content = [file_content for file_content in file_contents if file_content.filename.endswith("package.json")][0]
+    assert len(package_json_content.content.splitlines()) == 5
 
     assert file_contents[2].filename == "test/mock_directory/README.md"
     assert file_contents[2].is_binary is False
